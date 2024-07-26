@@ -17,10 +17,30 @@ FEEDS = {
     'booksdata.csv': {'format': 'csv'}
 }
 
+SCRAPEOPS_API_KEY = '554ede61-2f4b-4513-88d3-cc37a066e0f3'
+SCRAPEOPS_FAKE_USER_AGENT_ENDPOINT = 'https://headers.scrapeops.io/v1/user-agents'
+SCRAPEOPS_FAKE_USER_AGENT_ENABLED = True
+SCRAPEOPS_NUM_RESULTS = 50
+
+SCRAPEOPS_FAKE_BROWSER_HEADER_ENDPOINT = 'http://headers.scrapeops.io/v1/browser-headers'
+SCRAPEOPS_FAKE_BROWSER_HEADER_ENABLED = True
+
+ROTATING_PROXY_LIST = [
+    # '154.12.255.155:53225',
+    # '104.255.170.67:59874',
+    # '86.49.28.236:5678',
+    # '154.16.146.42:80',
+    # '181.214.231.172:8080',
+    # '192.168.1.2:1900'
+    '1.4.157.35:4694',
+    '102.39.156.37:1080',
+]
+# USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "bookscraper (+http://www.yourdomain.com)"
 
-# Obey robots.txt rules
+# Obey robots.txt rules  | for complex websites will set this to False, otherwise True
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
@@ -54,9 +74,13 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
+DOWNLOADER_MIDDLEWARES = {
 #    "bookscraper.middlewares.BookscraperDownloaderMiddleware": 543,
-#}
+#    "bookscraper.middlewares.ScrapeOpsFakeUserAgentMiddleware": 400,
+    "bookscraper.middlewares.ScrapeOpsFakeBrowserHeaderAgentMiddleware": 400,
+    # "rotating_proxies.middlewares.RotatingProxyMiddleware": 610,
+    # "rotating_proxies.middlewares.BanDetectionMiddleware": 620,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -68,6 +92,7 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    "bookscraper.pipelines.BookscraperPipeline": 300,
+   "bookscraper.pipelines.SaveToMySQLPipeline": 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
